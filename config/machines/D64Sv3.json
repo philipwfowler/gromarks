@@ -1,0 +1,12 @@
+{ "id":"D64Sv3",
+  "cloud":"azure",
+  "gpu-number": 0,
+  "core-number": 64,
+  "core-simd": "AVX2_256",
+  "gromacs":
+    {
+      "version": "2016.4",
+      "path": "/usr/local/gromacs/2016.4-avx/bin/GMXRC",
+      "mpi": 1
+    }
+}

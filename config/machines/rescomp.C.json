@@ -1,0 +1,11 @@
+{ "id":"rescomp.D",
+  "gpu-number": 0,
+  "core-number": 24,
+  "core-simd": "AVX2",
+  "gromacs":
+    {
+      "version": "2016.4",
+      "path": "/apps/well/gromacs/2016.4-gcc5.4.0-Anode/bin/gmx/GMXRC",
+      "mpi": 1
+    }
+}

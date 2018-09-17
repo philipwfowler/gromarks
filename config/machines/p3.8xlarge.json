@@ -1,0 +1,13 @@
+{ "id":"p3.8xlarge",
+  "cloud":"aws",
+  "gpu-type": "V100",
+  "gpu-number": 4,
+  "core-number": 32,
+  "core-simd": "AVX2_256",
+  "gromacs":
+    {
+      "version": "2016.4",
+      "path": "/usr/local/gromacs/2016.4-cuda/bin/GMXRC",
+      "mpi": 1
+    }
+}
