@@ -5,14 +5,14 @@ import json
 import math, os
 
 aparser = argparse.ArgumentParser()
-aparser.add_argument("--id",default=None,help="the name of the input csv file")
-aparser.add_argument("--protein",default=None,help="the name of the protein benchmark (dhfr, pepst or rpob)")
+aparser.add_argument("--id",default=None,help="the name of the JSON describing the machine configuration e.g. rescomp.F")
+aparser.add_argument("--protein",default=None,help="the name of the benchmarking TPR file e.g. dhfr/rpob/peptst")
 options = aparser.parse_args()
 
 standard_options=" -resethway -maxh 0.1 -noconfout -pin on"
 
 # load the JSON file
-with open("machines/"+options.id+".json",'r') as f:
+with open("config/machines/"+options.id+".json",'r') as f:
     machine=json.load(f)
 
 output_folder=options.protein+"-"+options.id
@@ -48,13 +48,13 @@ for ngpu in number_gpus:
                 if ngpu>0 and ntmpi==ngpu:
                     # print ngpu, ntmpi, ntomp
                     tpr_file=options.protein+'_'+options.id+"_"+machine["gromacs"]["version"]+"_"+str(ntmpi)+"_"+str(ngpu)+"_"+str(ntomp)
-                    OUTPUT.write("cp ../tpr-files/"+options.protein+".tpr "+tpr_file+".tpr"+"\n")
+                    OUTPUT.write("cp ../config/tpr-files/"+options.protein+".tpr "+tpr_file+".tpr"+"\n")
                     line = "mpirun -np "+str(ntmpi)+" mdrun_mpi -deffnm "+tpr_file+" -ntomp "+str(ntomp)+standard_options+"\n"
                     OUTPUT.write(line+"\n")
                 elif ngpu==0:
                     # print ngpu, ntmpi, ntomp
                     tpr_file=options.protein+'_'+options.id+"_"+machine["gromacs"]["version"]+"_"+str(ntmpi)+"_"+str(ngpu)+"_"+str(ntomp)
-                    OUTPUT.write("cp ../tpr-files/"+options.protein+".tpr "+tpr_file+".tpr"+"\n")
+                    OUTPUT.write("cp ../config/tpr-files/"+options.protein+".tpr "+tpr_file+".tpr"+"\n")
                     if machine["gpu-number"]>0:
                         line = "mpirun -np "+str(ntmpi)+" mdrun_mpi -deffnm "+tpr_file+" -ntomp "+str(ntomp)+" -nb cpu"+standard_options+"\n"
                     else:
