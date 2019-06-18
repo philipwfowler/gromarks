@@ -1,24 +1,29 @@
 #! /usr/bin/env python
 
-import argparse
+import argparse, pkg_resources
 import json
 import math, os
 
 aparser = argparse.ArgumentParser()
 aparser.add_argument("--id",default=None,help="the name of the JSON describing the machine configuration e.g. rescomp.F")
-aparser.add_argument("--protein",default=None,help="the name of the benchmarking TPR file e.g. dhfr/rpob/peptst")
+aparser.add_argument("--protein",default=None,help="the path to the benchmarking TPR file e.g. dhfr/rpob/peptst")
 options = aparser.parse_args()
 
+(tpr_folder,tpr_filename)=os.path.split(options.protein)
 
-standard_options=" -resethway -maxh 0.1 -noconfout -pin on"
+protein=tpr_filename.split('.tpr')[0]
+
+resource_package = __name__
+resource_path = '/'.join(('../config/machines/', options.id+".json"))  # Do not use os.path.join()
+machine_file = pkg_resources.resource_filename(resource_package, resource_path)
 
 # load the JSON file
-with open("config/machines/"+options.id+".json",'r') as f:
+with open(machine_file,'r') as f:
     machine=json.load(f)
 
 assert machine["how-run"] in ["bash","scheduler"], "how-run not set correctly in JSON file, must be one of bash/scheduler"
 
-output_folder=options.protein+"-"+options.id
+output_folder=protein+"-"+options.id
 
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
@@ -55,7 +60,7 @@ for ngpu in number_gpus:
 
             if (ntmpi*ntomp)<=machine["core-number"]:
 
-                stem=options.protein+'_'+options.id+"_"+machine["gromacs"]["version"]+"_"+str(ntmpi)+"_"+str(ngpu)+"_"+str(ntomp)
+                stem=protein+'_'+options.id+"_"+machine["gromacs"]["version"]+"_"+str(ntmpi)+"_"+str(ngpu)+"_"+str(ntomp)
 
                 line=""
 
@@ -84,18 +89,15 @@ for ngpu in number_gpus:
                     else:
                         line+=machine["gromacs"]["command"]
 
-
-                    # print ngpu, ntmpi, ntomp
-
                     if machine["gpu-number"]>0:
-                        line += " -nb cpu"
+                        line=line.replace("-noconfout","-noconfout -nb cpu")
 
                 if line!="":
                     line=line.replace("NTMPI",str(ntmpi))
                     line=line.replace("NTOMP",str(ntomp))
+                    line=line.replace("TPRFILEPATH",options.protein)
                     line=line.replace("TPRFILE",str(stem))
-                    line=line.replace("PROTEIN",options.protein)
-                    print(line)
+                    line=line.replace("PROTEIN",protein)
                     OUTPUT.write(line+"\n")
 
                 if machine["how-run"]=="scheduler" and line !="":

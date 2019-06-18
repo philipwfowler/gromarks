@@ -7,6 +7,6 @@
     {
       "version": "2016.4",
       "path": "/usr/local/gromacs/2016.4/bin/GMXRC",
-      "command": "cp ../config/tpr-files/PROTEIN.tpr TPRFILE.tpr\nmpirun -np NTMPI mdrun_mpi -deffnm TPRFILE -ntomp NTOMP -resethway -maxh 0.1 -noconfout -pin on"
+      "command": "cp TPRFILEPATH TPRFILE.tpr\nmpirun -np NTMPI mdrun_mpi -deffnm TPRFILE -ntomp NTOMP -resethway -maxh 0.1 -noconfout -pin on"
     }
 }

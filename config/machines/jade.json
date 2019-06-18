@@ -1,7 +1,7 @@
 { "id":"jade",
   "gpu-type": "DGX-1",
   "gpu-number": 8,
-  "gpu-number-min":1,
+  "gpu-number-min":0,
   "core-number": 40,
   "core-simd": "AVX2_256",
   "how-run": "scheduler",
