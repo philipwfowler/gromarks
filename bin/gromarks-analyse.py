@@ -9,9 +9,7 @@ aparser.add_argument("--id",default=None,help="the name of the JSON describing t
 aparser.add_argument("--protein",default=None,help="the name of the benchmarking TPR file e.g. dhfr/rpob/peptst")
 options = aparser.parse_args()
 
-(tpr_folder,tpr_filename)=os.path.split(options.protein)
-
-protein=tpr_filename.split('.tpr')[0]
+protein=options.protein
 
 resource_package = __name__
 resource_path = '/'.join(('../config/machines/', options.id+".json"))  # Do not use os.path.join()
@@ -40,13 +38,20 @@ for ngpu in number_gpus:
 
         output_line="%15s, %7i, %12s, %10s, %3i, %3i," % (machine['id'],machine['core-number'],gpu_type,machine['gromacs']['version'],ntmpi,ngpu)
         print_line=False
+
         for ntomp in number_threads:
-            log_file = output_folder+"/"+options.protein+'_'+options.id+"_"+machine["gromacs"]["version"]+"_"+str(ntmpi)+"_"+str(ngpu)+"_"+str(ntomp)+".log"
+
+            log_file = options.protein+'_'+options.id+"_"+machine["gromacs"]["version"]+"_"+str(ntmpi)+"_"+str(ngpu)+"_"+str(ntomp)+".log"
+
             if os.path.exists(log_file):
+
                 with open(log_file,'r') as file:
+
                     for line in file:
+
                         if line:
                             cols=line.split()
+
                             if cols and cols[0]=="Performance:":
                                 print_line=True
                                 output_line+= " %7.2f, " % (float(cols[1]))
