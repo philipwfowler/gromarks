@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-import argparse
+import argparse, pkg_resources
 import json
 import math, os
 
@@ -9,8 +9,16 @@ aparser.add_argument("--id",default=None,help="the name of the JSON describing t
 aparser.add_argument("--protein",default=None,help="the name of the benchmarking TPR file e.g. dhfr/rpob/peptst")
 options = aparser.parse_args()
 
+(tpr_folder,tpr_filename)=os.path.split(options.protein)
+
+protein=tpr_filename.split('.tpr')[0]
+
+resource_package = __name__
+resource_path = '/'.join(('../config/machines/', options.id+".json"))  # Do not use os.path.join()
+machine_file = pkg_resources.resource_filename(resource_package, resource_path)
+
 # load the JSON file
-with open("config/machines/"+options.id+".json",'r') as f:
+with open(machine_file,'r') as f:
     machine=json.load(f)
 
 output_folder=options.protein+"-"+options.id
