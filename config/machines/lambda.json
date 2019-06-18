@@ -2,10 +2,11 @@
   "gpu-number": 0,
   "core-number": 12,
   "core-simd": "AVX2_256",
+  "how-run": "bash",
   "gromacs":
     {
       "version": "2016.4",
       "path": "/usr/local/gromacs/2016.4/bin/GMXRC",
-      "mpi": 1
+      "command": "cp ../config/tpr-files/PROTEIN.tpr TPRFILE.tpr\nmpirun -np NTMPI mdrun_mpi -deffnm TPRFILE -ntomp NTOMP -resethway -maxh 0.1 -noconfout -pin on"
     }
 }
