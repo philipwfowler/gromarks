@@ -9,7 +9,7 @@
     {
       "version": "2018.3",
       "header": "#!/bin/bash\n#SBATCH --nodes=1\n#SBATCH --ntasks-per-node=1\n#SBATCH --cpus-per-task=NTOMP\n#SBATCH --gres=gpu:NTMPI\n#SBATCH --gres-flags=enforce-binding\n#SBATCH --time=00:10:00\n#SBATCH -J TPRFILE\n#SBATCH -p small\n",
-      "module-cmds": "module purge\nmodule load gromacs/2018.3\n\ncp ../config/tpr-files/PROTEIN.tpr TPRFILE.tpr\n",
+      "module-cmds": "module purge\nmodule load gromacs/2018.3\n\ncp TPRFILEPATH TPRFILE.tpr\n",
       "command": "mpirun -np ${SLURM_NTASKS_PER_NODE} --bind-to socket mdrun_mpi -deffnm TPRFILE -maxh 0.12 -resethway -noconfout -ntomp ${SLURM_CPUS_PER_TASK} &> TPRFILE.log\n",
       "path": "/usr/local/gromacs/2016.4-cuda/bin/GMXRC"
     }
