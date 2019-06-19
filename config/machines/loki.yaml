@@ -1,0 +1,8 @@
+id: loki
+gpu-number: 0
+core-number: 48
+core-simd: AVX2_256
+gromacs:
+  version: "2016.5"
+  path: /home/mmmnano/.usr/local/gromacs/2016.5/bin/GMXRC
+  mpi: 1

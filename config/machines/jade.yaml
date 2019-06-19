@@ -1,0 +1,27 @@
+id: jade
+gpu-type: DGX-1
+gpu-number: 8
+gpu-number-min: 0
+core-number: 40
+core-simd: AVX2_256
+how-run: scheduler
+gromacs:
+  version: "2018.3"
+  header: |
+    #!/bin/bash
+    #SBATCH --nodes=1
+    #SBATCH --ntasks-per-node=NTMPI
+    #SBATCH --cpus-per-task=NTOMP
+    #SBATCH --gres=gpu:NTMPI
+    #SBATCH --gres-flags=enforce-binding
+    #SBATCH --time=00:13:00
+    #SBATCH -J TPRFILE
+    #SBATCH -p big
+  module-cmds: |
+    module purge
+    module load gromacs/2018.3
+
+    cp TPRFILEPATH TPRFILE.tpr
+  command: |
+    mpirun -np ${SLURM_NTASKS_PER_NODE} --bind-to socket mdrun_mpi -deffnm TPRFILE -maxh 0.2 -resethway -noconfout -ntomp ${SLURM_CPUS_PER_TASK} &> TPRFILE.log
+  path: /usr/local/gromacs/2016.4-cuda/bin/GMXRC

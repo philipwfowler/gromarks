@@ -1,11 +1,11 @@
 #! /usr/bin/env python
 
 import argparse, pkg_resources
-import json
+import yaml
 import math, os
 
 aparser = argparse.ArgumentParser()
-aparser.add_argument("--id",default=None,help="the name of the JSON describing the machine configuration e.g. rescomp.F")
+aparser.add_argument("--id",default=None,help="the name of the YAML describing the machine configuration e.g. rescomp.F")
 aparser.add_argument("--protein",default=None,help="the path to the benchmarking TPR file e.g. dhfr/rpob/peptst")
 options = aparser.parse_args()
 
@@ -14,14 +14,14 @@ options = aparser.parse_args()
 protein=tpr_filename.split('.tpr')[0]
 
 resource_package = __name__
-resource_path = '/'.join(('../config/machines/', options.id+".json"))  # Do not use os.path.join()
+resource_path = '/'.join(('../config/machines/', options.id+".yaml"))  # Do not use os.path.join()
 machine_file = pkg_resources.resource_filename(resource_package, resource_path)
 
-# load the JSON file
+# load the YAML file
 with open(machine_file,'r') as f:
-    machine=json.load(f)
+    machine=yaml.load(f)
 
-assert machine["how-run"] in ["bash","scheduler"], "how-run not set correctly in JSON file, must be one of bash/scheduler"
+assert machine["how-run"] in ["bash","scheduler"], "how-run not set correctly in YAML file, must be one of bash/scheduler"
 
 output_folder=protein+"-"+options.id
 
