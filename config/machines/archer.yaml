@@ -1,6 +1,6 @@
 id: archer
 node:
-  number: 6
+  number: 1
 gpu:
   present: False
 cpu:

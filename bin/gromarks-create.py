@@ -42,7 +42,10 @@ if machine_description["node"]["number"]>1:
 else:
     list_number_nodes=[1]
 
+print(list_number_nodes)
+
 for nnode in list_number_nodes:
+
 
     # iterate over the number of GPUs
     for ngpu in list_number_gpus:
@@ -60,7 +63,9 @@ for nnode in list_number_nodes:
 
             for ntomp in list_number_threads:
 
-                if (ntmpi*ntomp)<=machine_description["cpu"]["cores"]:
+                print(nnode,ngpu,ntcore,ntomp,ntmpi)
+            
+                if (ntmpi*ntomp)<=nnode*machine_description["cpu"]["cores"]:
 
                     stem=protein+'_'+options.machine+"_"+machine_description["gromacs"]["version"]+"_"+str(ntmpi)+"_"+str(ngpu)+"_"+str(ntomp)
 
