@@ -1,0 +1,30 @@
+id: archer
+node:
+  number: 6
+gpu:
+  present: False
+cpu:
+  cores: 24
+  simd: AVX
+  threads: True
+gromacs:
+  version: "2018.6"
+  command: |-
+    #!/bin/bash --login
+
+    #PBS -N TPRFILE
+    #PBS -l select=NTNODES
+    #PBS -l walltime=00:10:00
+    #PBS -A e280-Fowler
+
+    export PBS_O_WORKDIR=$(readlink -f $PBS_O_WORKDIR)
+    cd $PBS_O_WORKDIR
+
+    export OMP_NUM_THREADS=NTOMP
+
+    module purge
+    module add gromacs/2018.6
+
+    cp TPRFILEPATH TPRFILE.tpr
+
+    aprun -n NTMPI mdrun_mpi -deffnm TPRFILE -ntomp NTOMP -maxh 0.15 -resethway -stepout 100 -v -noconfout
