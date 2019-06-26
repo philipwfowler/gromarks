@@ -5,6 +5,13 @@ gpu:
   present: False
 cpu:
   cores: 12
+  list:
+  - 1
+  - 2
+  - 4
+  - 6
+  - 8
+  - 12
   simd: AVX2_256
   threads: False
 gromacs:

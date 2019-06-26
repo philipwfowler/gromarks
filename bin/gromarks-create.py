@@ -13,7 +13,6 @@ options = aparser.parse_args()
 (tpr_folder,tpr_filename)=os.path.split(options.protein)
 protein=tpr_filename.split('.tpr')[0]
 
-
 # now find and then load the YAML file
 resource_package = __name__
 resource_path = '/'.join(('../config/machines/', options.machine+".yaml"))  # Do not use os.path.join()
@@ -27,9 +26,12 @@ for i in [protein, options.machine,machine_description["gromacs"]["version"]]:
     output_folder+=str(i)+"/"
     pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
 
-# create a list containing the number of cores to consider as a doubling series
-power_of_2=int(math.log(machine_description["cpu"]["cores"])/math.log(2))
-list_number_cores= [ 2**i for i in range(0,power_of_2+1) ]
+if 'list' in machine_description["cpu"].keys():
+    list_number_cores=machine_description["cpu"]["list"]
+else:
+    # create a list containing the number of cores to consider as a doubling series
+    power_of_2=int(math.log(machine_description["cpu"]["cores"])/math.log(2))
+    list_number_cores= [ 2**i for i in range(0,power_of_2+1) ]
 
 if machine_description["gpu"]["present"]:
     list_number_gpus = range(machine_description["gpu"]["min"],machine_description["gpu"]["max"])
@@ -37,15 +39,12 @@ else:
     # if no GPU create a list holding zero
     list_number_gpus=[0]
 
-if machine_description["node"]["number"]>1:
-    list_number_nodes=range(1,machine_description["node"]["number"]+1)
+if 'list' in machine_description["node"].keys():
+    list_number_nodes=machine_description["node"]["list"]
 else:
     list_number_nodes=[1]
 
-print(list_number_nodes)
-
 for nnode in list_number_nodes:
-
 
     # iterate over the number of GPUs
     for ngpu in list_number_gpus:
@@ -61,13 +60,11 @@ for nnode in list_number_nodes:
             else:
                 list_number_threads=[1]
 
-            for ntomp in list_number_threads:
+            for ntomp in list_number_cores:
 
-                print(nnode,ngpu,ntcore,ntomp,ntmpi)
-            
                 if (ntmpi*ntomp)<=nnode*machine_description["cpu"]["cores"]:
 
-                    stem=protein+'_'+options.machine+"_"+machine_description["gromacs"]["version"]+"_"+str(ntmpi)+"_"+str(ngpu)+"_"+str(ntomp)
+                    stem=protein+'_'+options.machine+"_"+machine_description["gromacs"]["version"]+"_"+str(nnode)+"_"+str(ntcore)+"_"+str(ngpu)+"_"+str(ntomp)
 
                     line=""
 

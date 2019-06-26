@@ -1,10 +1,23 @@
 id: archer
 node:
-  number: 1
+  list:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
 gpu:
   present: False
 cpu:
   cores: 24
+  list:
+  - 1
+  - 2
+  - 4
+  - 8
+  - 12
+  - 24
   simd: AVX
   threads: True
 gromacs:
