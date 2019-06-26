@@ -25,7 +25,7 @@ gromacs:
   command: |-
     #!/bin/bash --login
 
-    #PBS -N TPRFILE
+    #PBS -N MD-NTNODES-NTCORES-NTGPU-NTOMP
     #PBS -l select=NTNODES
     #PBS -l walltime=00:10:00
     #PBS -A e280-Fowler

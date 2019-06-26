@@ -82,6 +82,8 @@ for nnode in list_number_nodes:
                     if line!="":
                         OUTPUT=open(output_folder+"/"+stem+".sh","w")
                         line=line.replace("NTNODES",str(nnode))
+                        line=line.replace("NTCORES",str(ntcore))
+                        line=line.replace("NTGPU",str(ngpu))
                         line=line.replace("NTMPI",str(ntmpi))
                         line=line.replace("NTOMP",str(ntomp))
                         line=line.replace("TPRFILEPATH",options.protein)
