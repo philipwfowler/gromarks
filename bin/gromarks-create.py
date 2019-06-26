@@ -53,13 +53,6 @@ for nnode in list_number_nodes:
 
             ntmpi=nnode*ntcore
 
-            if machine_description["cpu"]["threads"]:
-                power_of_2=int(math.log(machine_description["cpu"]["cores"]/ntmpi)/math.log(2))
-                list_number_threads=[ 2**a for a in range(0,power_of_2+1) ]
-
-            else:
-                list_number_threads=[1]
-
             for ntomp in list_number_cores:
 
                 if (ntmpi*ntomp)<=nnode*machine_description["cpu"]["cores"]:
